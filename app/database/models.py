@@ -27,7 +27,7 @@ class Invoice(Base):
     __tablename__ = "invoices"
     id = Column(Integer, primary_key=True, index=True)
     cliente_id = Column(Integer, ForeignKey("client.id"))
-    # date = Column(DateTime, default=datetime.utcnow)
+    date = Column(DateTime, default=datetime.datetime.utcnow)
     total = Column(Float)
     state = Column(String, default="PENDIENTE")
     client = relationship("Client", back_populates="invoices")
