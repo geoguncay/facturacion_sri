@@ -1,0 +1,159 @@
+# Entorno Virtual
+venv/
+env/
+ENV/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Base de Datos
+*.db
+*.sqlite
+*.sqlite3
+facturacion.db
+*.sqlite-journal
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+*.sublime-project
+*.sublime-workspace
+.project
+.pydevproject
+.settings/
+*.iml
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Entorno
+.env
+.env.local
+.env.*.local
+*.env
+
+# Archivos de Sistema
+.DS_Store
+Thumbs.db
+*.pem
+*.key
+*.crt
+
+# Logs
+*.log
+logs/
+*.log.*
+
+# Cache
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.hypothesis/
+
+# Testing
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.hypothesis/
+
+# Archivos Temporales
+*.tmp
+*.bak
+*.backup
+*.swp
+*.swo
+*~
+
+# PDFs generados (temporal)
+generated_pdfs/
+*.pdf
+
+# XML generados (temporal)
+generated_xmls/
+*.xml
+
+# Certificados (sensible)
+*.p12
+*.pfx
+*.pem
+*.key
+
+# Node (si se usa en el futuro)
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Configuración Local
+local_settings.py
+settings_local.py
+
+# Archivos de Compilación
+*.class
+*.o
+*.a
+*.so
+
+# Docker (si se añade en el futuro)
+.dockerignore
+Dockerfile
+docker-compose.yml
+
+# Github
+.github/secrets/*
+
+# IDE específicos
+.eclipse/
+.gradle/
+.idea/
+*.iml
+*.sublime-project
+*.sublime-workspace
+
+# Otros
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pyre/
