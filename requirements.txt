@@ -3,7 +3,9 @@ uvicorn
 sqlalchemy
 pydantic
 lxml
-zeep
 signxml
 reportlab
 python-multipart
+zeep
+signxml
+cryptography

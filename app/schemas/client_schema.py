@@ -4,7 +4,7 @@ from pydantic import BaseModel
 class CreateClient(BaseModel):
 
     name: str
-    identification: str
+    client_id: str
     address: str
     email: str
 
@@ -14,4 +14,4 @@ class Client(CreateClient):
     id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True

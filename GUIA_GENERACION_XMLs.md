@@ -1,41 +1,41 @@
-# Guía: Generación y Guardado de XMLs de Facturas
+# Guide: Invoice XML Generation and Storage
 
-## 📋 Descripción
+## 📋 Description
 
-Este documento explica cómo generar, firmar y guardar XMLs de facturas electrónicas válidas para el SRI Ecuador.
+This document explains how to generate, sign, and save valid electronic invoice XMLs for SRI Ecuador.
 
-## 🏗️ Arquitectura del Sistema
+## 🏗️ System Architecture
 
-El sistema de generación de XMLs está dividido en tres módulos:
+The XML generation system is divided into three modules:
 
 ```
 app/sri/
-├── xml_generator.py    # Genera los XMLs
-├── xml_signer.py       # Firma digitalmente los XMLs
-└── sri_client.py       # Cliente para servicios SRI
+├── xml_generator.py    # Generates XMLs
+├── xml_signer.py       # Digitally signs XMLs
+└── sri_client.py       # Client for SRI services
 ```
 
-## 📊 Flujo del Proceso
+## 📊 Process Flow
 
 ```
-1. Crear Cliente
+1. Create Client
    ↓
-2. Crear Productos
+2. Create Products
    ↓
-3. Crear Factura
+3. Create Invoice
    ↓
-4. Generar XML
+4. Generate XML
    ↓
-5. Firmar XML (opcional)
+5. Sign XML (optional)
    ↓
-6. Guardar XML
+6. Save XML
    ↓
-7. Enviar a SRI (producción)
+7. Send to SRI (production)
 ```
 
-## 🧪 Ejecutar Prueba Completa
+## 🧪 Run Complete Test
 
-Para probar todo el proceso de forma automática, ejecuta:
+To test the entire process automatically, run:
 
 ### macOS/Linux:
 ```bash

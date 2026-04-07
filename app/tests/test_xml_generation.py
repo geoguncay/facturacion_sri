@@ -1,16 +1,16 @@
 """
-Script de Prueba: Generar y Guardar XMLs de Facturas
-=====================================================
+Test Script: Generate and Save Invoice XMLs
+=============================================
 
-Este script demuestra el flujo completo de:
-1. Crear clientes
-2. Crear productos
-3. Crear una factura
-4. Generar el XML
-5. Guardar el XML
-6. Mostrar el resultado
+This script demonstrates the complete flow of:
+1. Create clients
+2. Create products
+3. Create an invoice
+4. Generate the XML
+5. Save the XML
+6. Display the result
 
-Uso:
+Usage:
     python -m app.tests.test_xml_generation
 """
 
@@ -19,7 +19,7 @@ import os
 from datetime import datetime
 from decimal import Decimal
 
-# Agregar el directorio del proyecto al path
+# Add project directory to path
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 
 from sqlalchemy.orm import Session
@@ -28,188 +28,188 @@ from app.database import models
 from app.sri.xml_generator import generate_invoice_xml, save_invoice_xml
 
 
-def crear_datos_prueba(db: Session):
-    """Crea clientes, productos y facturas de prueba"""
+def create_test_data(db: Session):
+    """Create test clients, products and invoices."""
     
     print("\n" + "="*60)
-    print("CREANDO DATOS DE PRUEBA")
+    print("CREATING TEST DATA")
     print("="*60)
     
-    # 1. Crear cliente
-    print("\n[1/5] Creando cliente...")
-    cliente = models.Client(
+    # 1. Create client
+    print("\n[1/5] Creating client...")
+    client = models.Client(
         name="TechCorp S.A.",
-        identification="1234567890",
+        client_id="1234567890",
         address="Av. Amazonas 123, Quito",
         email="info@techcorp.ec"
     )
-    db.add(cliente)
+    db.add(client)
     db.commit()
-    db.refresh(cliente)
-    print(f"✓ Cliente creado: ID={cliente.id}, Nombre={cliente.name}")
+    db.refresh(client)
+    print(f"✓ Client created: ID={client.id}, Name={client.name}")
     
-    # 2. Crear productos
-    print("\n[2/5] Creando productos...")
-    productos_data = [
-        {"name": "Licencia Software Premium", "price": 250.00, "iva": 30.00},
-        {"name": "Consultoría IT", "price": 150.00, "iva": 18.00},
-        {"name": "Soporte Técnico 24/7", "price": 100.00, "iva": 12.00},
+    # 2. Create products
+    print("\n[2/5] Creating products...")
+    products_data = [
+        {"name": "Premium Software License", "price": 250.00, "iva": 30.00},
+        {"name": "IT Consulting", "price": 150.00, "iva": 18.00},
+        {"name": "24/7 Technical Support", "price": 100.00, "iva": 12.00},
     ]
     
-    productos = []
-    for prod_data in productos_data:
-        producto = models.Product(
-            name_product=prod_data["name"],
+    products = []
+    for prod_data in products_data:
+        product = models.Product(
+            product_name=prod_data["name"],
             price=prod_data["price"],
             iva=prod_data["iva"]
         )
-        db.add(producto)
+        db.add(product)
         db.commit()
-        db.refresh(producto)
-        productos.append(producto)
-        print(f"  ✓ {producto.name_product}: ${producto.price}")
+        db.refresh(product)
+        products.append(product)
+        print(f"  ✓ {product.product_name}: ${product.price}")
     
-    # 3. Crear detalle de facturas
-    print("\n[3/5] Creando detalles de factura...")
-    detalles_data = [
-        {"producto": productos[0].name_product, "cantidad": 2, "precio": 250.00, "subtotal": 500.00, "descuento": 0},
-        {"producto": productos[1].name_product, "cantidad": 1, "precio": 150.00, "subtotal": 150.00, "descuento": 10},
-        {"producto": productos[2].name_product, "cantidad": 3, "precio": 100.00, "subtotal": 300.00, "descuento": 0},
+    # 3. Create invoice details
+    print("\n[3/5] Creating invoice details...")
+    details_data = [
+        {"producto": products[0].product_name, "cantidad": 2, "precio": 250.00, "subtotal": 500.00, "descuento": 0},
+        {"producto": products[1].product_name, "cantidad": 1, "precio": 150.00, "subtotal": 150.00, "descuento": 10},
+        {"producto": products[2].product_name, "cantidad": 3, "precio": 100.00, "subtotal": 300.00, "descuento": 0},
     ]
     
-    subtotal = sum(d["subtotal"] for d in detalles_data)
-    iva = round(subtotal * 0.12, 2)  # IVA del 12%
+    subtotal = sum(d["subtotal"] for d in details_data)
+    iva = round(subtotal * 0.12, 2)  # 12% VAT
     total = subtotal + iva
     
     print(f"  ✓ Subtotal: ${subtotal}")
-    print(f"  ✓ IVA (12%): ${iva}")
+    print(f"  ✓ VAT (12%): ${iva}")
     print(f"  ✓ Total: ${total}")
     
-    # 4. Crear factura
-    print("\n[4/5] Creando factura...")
-    factura = models.Invoice(
-        cliente_id=cliente.id,
+    # 4. Create invoice
+    print("\n[4/5] Creating invoice...")
+    invoice = models.Invoice(
+        client_id=client.id,
         total=total,
-        state="PENDIENTE"
+        state="PENDING"
     )
-    db.add(factura)
+    db.add(invoice)
     db.commit()
-    db.refresh(factura)
-    print(f"✓ Factura creada: ID={factura.id}")
+    db.refresh(invoice)
+    print(f"✓ Invoice created: ID={invoice.id}")
     
-    # Crear detalles de la factura
-    for detalle_data in detalles_data:
-        detalle = models.InvoiceDetail(
-            invoice_id=factura.id,
-            product=detalle_data["producto"],
-            quantity=detalle_data["cantidad"],
-            price=detalle_data["precio"],
-            subtotal=detalle_data["subtotal"]
+    # Create invoice details
+    for detail_data in details_data:
+        detail = models.InvoiceDetail(
+            invoice_id=invoice.id,
+            product=detail_data["producto"],
+            quantity=detail_data["cantidad"],
+            price=detail_data["precio"],
+            subtotal=detail_data["subtotal"]
         )
-        db.add(detalle)
+        db.add(detail)
     db.commit()
     
-    return cliente, productos, factura, detalles_data, subtotal, iva, total
+    return client, products, invoice, details_data, subtotal, iva, total
 
 
-def generar_xml_factura(cliente, factura, detalles_data, subtotal, iva, total):
-    """Genera el XML de la factura"""
+def generate_invoice_xml_file(client, invoice, details_data, subtotal, iva, total):
+    """Generate the invoice XML."""
     
-    print("\n[5/5] Generando XML...")
+    print("\n[5/5] Generating XML...")
     
-    # Preparar datos para el XML
+    # Prepare data for XML
     invoice_data = {
-        "razon_social": "Mi Empresa S.A.",
+        "razon_social": "My Company S.A.",
         "ruc": "1234567890001",
-        "clave_acceso": f"{factura.id:04d}{factura.date.year % 100:02d}{factura.date.month:02d}{factura.date.day:02d}0120001000000001000000000000000000000000",
+        "clave_acceso": f"{invoice.id:04d}{invoice.date.year % 100:02d}{invoice.date.month:02d}{invoice.date.day:02d}0120001000000001000000000000000000000000",
         "estab": "001",
         "pto_emision": "001",
-        "secuencial": str(factura.id),
-        "fecha": factura.date.strftime("%d/%m/%Y"),
-        "direccion": cliente.address,
+        "secuencial": str(invoice.id),
+        "fecha": invoice.date.strftime("%d/%m/%Y"),
+        "direccion": client.address,
         "subtotal": subtotal,
         "iva": iva,
         "total": total,
-        "detalles": detalles_data
+        "detalles": details_data
     }
     
-    # Generar XML
+    # Generate XML
     xml_content = generate_invoice_xml(invoice_data)
-    print("✓ XML generado exitosamente")
+    print("✓ XML generated successfully")
     
     return xml_content
 
 
-def guardar_xml(factura, xml_content):
-    """Guarda el XML en el sistema de archivos"""
+def save_xml(invoice, xml_content):
+    """Save the invoice XML to file."""
     
-    print("\nGUARDANDO XML...")
+    print("\nSAVING XML...")
     print("="*60)
     
-    filepath = save_invoice_xml(factura.id, xml_content)
+    filepath = save_invoice_xml(invoice.id, xml_content)
     
-    print(f"✓ XML guardado en: {filepath}")
-    print(f"✓ Tamaño del archivo: {len(xml_content)} bytes")
+    print(f"✓ XML saved to: {filepath}")
+    print(f"✓ File size: {len(xml_content)} bytes")
     
     return filepath
 
 
-def mostrar_xml(filepath):
-    """Muestra el contenido del XML"""
+def display_xml(filepath):
+    """Display the XML content."""
     
-    print("\nCONTENIDO DEL XML:")
+    print("\nXML CONTENT:")
     print("="*60)
     
     with open(filepath, "r", encoding="utf-8") as f:
-        contenido = f.read()
-        print(contenido)
+        content = f.read()
+        print(content)
 
 
 def main():
-    """Función principal"""
+    """Main function."""
     
     print("\n" + "="*60)
-    print("PRUEBA COMPLETA: GENERACIÓN Y GUARDADO DE XMLs")
+    print("COMPLETE TEST: INVOICE XML GENERATION AND SAVING")
     print("="*60)
     
-    # Crear tablas
+    # Create tables
     models.Base.metadata.create_all(bind=engine)
     db = SessionLocal()
     
     try:
-        # 1. Crear datos de prueba
-        cliente, productos, factura, detalles_data, subtotal, iva, total = crear_datos_prueba(db)
+        # 1. Create test data
+        client, products, invoice, details_data, subtotal, iva, total = create_test_data(db)
         
-        # 2. Generar XML
-        xml_content = generar_xml_factura(cliente, factura, detalles_data, subtotal, iva, total)
+        # 2. Generate XML
+        xml_content = generate_invoice_xml_file(client, invoice, details_data, subtotal, iva, total)
         
-        # 3. Guardar XML
-        filepath = guardar_xml(factura, xml_content)
+        # 3. Save XML
+        filepath = save_xml(invoice, xml_content)
         
-        # 4. Mostrar XML generado
-        if os.path.getsize(filepath) < 2000:  # Solo mostrar si no es muy grande
-            mostrar_xml(filepath)
+        # 4. Display XML
+        if os.path.getsize(filepath) < 2000:  # Only show if not too large
+            display_xml(filepath)
         else:
-            print("(Archivo muy grande para mostrar en consola)")
+            print("(File too large to display in console)")
         
-        # 5. Resumen final
+        # 5. Final summary
         print("\n" + "="*60)
-        print("✅ PRUEBA COMPLETADA EXITOSAMENTE")
+        print("✅ TEST COMPLETED SUCCESSFULLY")
         print("="*60)
-        print(f"\nResumen:")
-        print(f"  • Cliente: {cliente.name}")
-        print(f"  • Email: {cliente.email}")
-        print(f"  • Factura ID: {factura.id}")
-        print(f"  • Productos: {len(productos)}")
-        print(f"  • Detalles: {len(detalles_data)}")
+        print(f"\nSummary:")
+        print(f"  • Client: {client.name}")
+        print(f"  • Email: {client.email}")
+        print(f"  • Invoice ID: {invoice.id}")
+        print(f"  • Products: {len(products)}")
+        print(f"  • Details: {len(details_data)}")
         print(f"  • Subtotal: ${subtotal}")
-        print(f"  • IVA: ${iva}")
+        print(f"  • VAT: ${iva}")
         print(f"  • Total: ${total}")
-        print(f"  • XML guardado en: {filepath}")
+        print(f"  • XML saved to: {filepath}")
         print("\n" + "="*60)
         
     except Exception as e:
-        print(f"\n❌ Error durante la prueba: {str(e)}")
+        print(f"\n❌ Error during test: {str(e)}")
         import traceback
         traceback.print_exc()
     

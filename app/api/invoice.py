@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from app.database.db import SessionLocal
 from app.services.service_invoice import calculate_total
 from app.schemas import invoice_schema
@@ -7,7 +7,7 @@ from app.database import models
 
 router = APIRouter(
     prefix="/invoices",
-    tags=["Facturas"]
+    tags=["Invoices"]
 )
 
 def get_db():
@@ -18,11 +18,14 @@ def get_db():
         db.close()
 
 
-@router.post("/")
+@router.post("/", response_model=invoice_schema.Invoice)
 def create_invoice(data: invoice_schema.CreateInvoice, db: Session = Depends(get_db)):
+    """Create a new invoice with details."""
+    
+    # Calculate total from details
+    total = calculate_total([d.dict() for d in data.details])
 
-    total = calculate_total([d.dict() for d in data.detalles])
-
+    # Create invoice
     invoice = models.Invoice(
         client_id=data.client_id,
         total=total
@@ -32,18 +35,30 @@ def create_invoice(data: invoice_schema.CreateInvoice, db: Session = Depends(get
     db.commit()
     db.refresh(invoice)
 
-    for d in data.detalles:
+    # Create invoice details
+    for d in data.details:
+        subtotal = d.quantity * d.price
         detail = models.InvoiceDetail(
             invoice_id=invoice.id,
-            product_id=d.product_id,
+            product=d.product,
             quantity=d.quantity,
-            price=d.price
+            price=d.price,
+            subtotal=subtotal
         )
         db.add(detail)
+    
     db.commit()
+    
+    # Refresh to load relationships
+    db.refresh(invoice)
+    
     return invoice
 
-@router.get("/")
+@router.get("/", response_model=list[invoice_schema.Invoice])
 def list_invoices(db: Session = Depends(get_db)):
-    return db.query(models.Invoice).all()
+    """List all invoices."""
+    invoices = db.query(models.Invoice).all()
+    if not invoices:
+        raise HTTPException(status_code=404, detail="No se encontraron facturas. La lista está vacía.")
+    return invoices
 

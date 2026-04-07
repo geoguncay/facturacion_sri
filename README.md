@@ -169,7 +169,7 @@ curl -X POST "http://127.0.0.1:8000/clients/" \
   -H "Content-Type: application/json" \
   -d '{
     "name": "Empresa XYZ",
-    "identification": "1234567890",
+    "client_id": "1234567890",
     "address": "Calle Principal 123",
     "email": "info@empresa.ec"
   }'

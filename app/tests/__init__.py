@@ -1,1 +1,1 @@
-# Tests para la aplicación de Facturación SRI
+# Tests for the SRI Invoicing Application
